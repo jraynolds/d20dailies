@@ -24,6 +24,16 @@ const routes = [
     path: '/description',
     name: 'Descriptive Exercises',
     component: () => import('../views/DescriptionExercises.vue')
+  },
+  {
+    path: '/trolley',
+    name: 'Trolley Problems',
+    component: () => import('../views/TrolleyExercises.vue')
+  },
+  {
+    path: '/combat',
+    name: 'Combat Tests',
+    component: () => import('../views/CombatTests.vue')
   }
 ]
 
