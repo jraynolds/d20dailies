@@ -8,7 +8,7 @@
 				<Dungeon />
 			</v-col> -->
 			<v-col cols="6" sm="12">
-				<SpeakingExercises />
+				<!-- <SpeakingExercises /> -->
 			</v-col>
 		</v-row>
 	</v-container>
@@ -17,13 +17,13 @@
 <script>
 // import Charsheet from "@/components/Charsheet.vue"
 // import Dungeon from "@/components/Dungeon.vue"
-import SpeakingExercises from "@/components/SpeakingExercises.vue"
+// import SpeakingExercises from "@/components/SpeakingExercises.vue"
 
 export default {
 	components: {
 		// Charsheet,
 		// Dungeon,
-		SpeakingExercises
+		// SpeakingExercises
 	}
 }
 </script>
