@@ -4,7 +4,7 @@
 			<TutorialDialog :tutorial="dialog" :tutorialOpenOnStart="tutorialOpenOnStart" />
 
 			<v-spacer />
-			<v-col sm="8" >
+			<v-col lg="6" sm="8">
 				<Exercise :exercise="exercise" />
 			</v-col>
 			<v-spacer />

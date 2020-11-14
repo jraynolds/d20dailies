@@ -1,181 +1,163 @@
 <template>
 	<v-container>
-		<v-card class="px-4">
 
-			<v-row id="details">
-				<!-- <v-img>
-				</v-img> -->
-				<v-icon style="font-size: 250px;">mdi-account</v-icon>
-				<v-col class="pr-8">
-					
+		<v-row id="avatar" class="align-center">
+			<v-col class="flex-grow-0 mr-n6">
+				<v-btn icon x-large @click="$emit('charswap', -1)">
+					<v-icon x-large>mdi-chevron-left</v-icon>
+				</v-btn>
+			</v-col>
+			<v-col class="flex-grow-1 text-center">
+				<v-icon v-if="!character.image" style="font-size: 220px;">mdi-account</v-icon>
+				<v-img 
+					v-else 
+					:src="character.image"
+					width="220"
+					height="220"
+					style="margin-left: auto; margin-right: auto;"
+				/>
+				<v-row class="justify-center align-center">
+					<v-file-input
+						:rules="avatarRules"
+						style="font-size: small"
+						accept="image/png, image/jpeg, image/bmp"
+						prepend-icon="mdi-camera"
+						label="Upload avatar"
+						@change="uploadAvatar"
+					></v-file-input>
+					<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar">
+						<v-icon large>mdi-upload</v-icon>
+					</v-btn>
+				</v-row>
+			</v-col>
+			<v-col class="flex-grow-0 ml-n6">
+				<v-btn icon x-large @click="$emit('charswap', 1)">
+					<v-icon x-large>mdi-chevron-right</v-icon>
+				</v-btn>
+			</v-col>
+		</v-row>
+
+		<v-row id="details">
+			<v-col>
+				<v-text-field
+					label="Class and Level"
+					:value="character.class + ' ' + character.level"
+					disabled
+				/>
+			</v-col>
+			<v-col>
+				<v-text-field
+					label="Experience points"
+					:value="character.experience"
+					disabled
+				/>
+			</v-col>
+		</v-row>
+
+		<v-row id="stats" class="text-center">
+			<v-col cols="4">
+				<v-icon style="font-size: 100px;" :style="getAttackGradient">mdi-sword</v-icon>
+			</v-col>
+
+			<v-col cols="4">
+				<v-icon style="font-size: 100px;" :style="getHPGradient">mdi-heart</v-icon>
+			</v-col>
+			
+			<v-col cols="4">
+				<v-icon style="font-size: 100px;" :style="getXPGradient">mdi-chart-bar</v-icon>
+			</v-col>
+		</v-row>
+
+		<v-row id="sheet">
+			<v-col id="abilitiesAndSkills">
+				<v-card v-for="ability in abilities" :key="ability.name" class="mb-2">
 					<v-row>
-						<v-col cols="4">
-							<v-text-field
-								label="Class and Level"
-								:value="character.class + ' ' + character.level"
-							/>
+						<v-col cols="4" class="text-center align-center justify-center d-flex">
+							<v-icon style="font-size: 50px;">{{ "mdi-" + ability.icon }}</v-icon>
 						</v-col>
-						<v-col cols="4">
-							<v-text-field
-								label="Alignment"
-								:value="character.alignment"
-							/>
-						</v-col>
-						<v-col cols="4">
-							<v-text-field
-								label="Experience points"
-								:value="character.experience"
-								disabled
-							/>
+
+						<v-col>
+							<v-col 
+								cols="12" 
+								v-for="skill in skills" 
+								:key="skill.name" 
+								class="pa-0 my-n4"
+							>
+								<v-row v-if="skill.ability == ability.name">
+									<v-col class="flex-grow-0">
+										{{ character.skills[skill.name.toLowerCase()] }}
+									</v-col>
+									<v-col>{{ skill.name }}</v-col>
+								</v-row>
+							</v-col>
 						</v-col>
 					</v-row>
+				</v-card>
+			</v-col>
 
-					<v-row id="stats" class="text-center">
-						<v-col cols="4">
-							<v-icon style="font-size: 100px;" :style="getAttackGradient">mdi-sword</v-icon>
-						</v-col>
+			<v-col id="equipment" v-if="includeEquipment">
+				<v-icon style="font-size: 350px;">mdi-human</v-icon>
+			</v-col>
 
-						<v-col cols="4">
-							<v-icon style="font-size: 100px;" :style="getHPGradient">mdi-heart</v-icon>
-						</v-col>
-						
-						<v-col cols="4">
-							<v-icon style="font-size: 100px;" :style="getXPGradient">mdi-chart-bar</v-icon>
-						</v-col>
-					</v-row>
+		</v-row>
 
-				</v-col>
-			</v-row>
-
-			<v-row id="sheet">
-				<v-col id="abilitiesAndSkills">
-					<v-card v-for="ability in character.abilities" :key="ability.name" class="mb-2">
-						<v-row>
-							<v-col cols="6" class="text-center">
-								<v-icon style="font-size: 100px;">{{ "mdi-" + ability.icon }}</v-icon>
-							</v-col>
-
-							<v-col cols="6">
-								<v-col cols="12" v-for="skill in character.skills" :key="skill.name" class="pa-0">
-									<v-row v-if="skill.ability == ability.name">
-										<v-col class="flex-grow-0">{{ skill.score }}</v-col>
-										<v-col>{{ skill.name }}</v-col>
-									</v-row>
-								</v-col>
-							</v-col>
-						</v-row>
-					</v-card>
-				</v-col>
-
-				<v-col id="equipment">
-					<v-icon style="font-size: 400px;">mdi-human</v-icon>
-				</v-col>
-
-			</v-row>
-
-		</v-card>
 	</v-container>
 </template>
 
 <script>
 export default {
+	props: [ "player", "character", "includeEquipment" ],
 	data: () => ({
-		player: {
-			name: "Jasper Raynolds",
-		},
-		character: {
-			class: "Paladin",
-			level: 8,
-			hp: 20,
-			maxHp: 30,
-			alignment: "Lawful Good",
-			experience: 1000,
-			abilities: [
-				{
-					name: "Intelligence",
-					score: 14,
-					icon: "brain"
-				},
-				{
-					name: "Wisdom",
-					score: 14,
-					icon: "thought-bubble-outline"
-				},
-				{
-					name: "Charisma",
-					score: 14,
-					icon: "emoticon-wink-outline"
-				}
-			],
-			skills: [
-				{
-					name: "Improvisation",
-					ability: "Intelligence",
-					isProficient: false,
-					score: 4
-				},
-				{
-					name: "Reasoning",
-					ability: "Intelligence",
-					isProficient: false,
-					score: 4
-				},
-				{
-					name: "Accents",
-					ability: "Wisdom",
-					isProficient: false,
-					score: 4
-				},
-				{
-					name: "Recall",
-					ability: "Wisdom",
-					isProficient: false,
-					score: 4
-				},
-				{
-					name: "Monologue",
-					ability: "Charisma",
-					isProficient: false,
-					score: 4
-				},
-				{
-					name: "Persuasiveness",
-					ability: "Charisma",
-					isProficient: false,
-					score: 4
-				},
-			],
-			inspiration: false,
-			stats: {
-				attack: {
-					amount: 40,
-					maximum: 40,
-					filledColor: [235, 100, 39],
-					midColor: [235, 100, 65],
-					emptyColor: [235, 100, 85],
-					angle: 315,
-					offset: 22
-				},
-				hp: {
-					amount: 80,
-					maximum: 80,
-					filledColor: [0, 100, 39],
-					midColor: [0, 100, 65],
-					emptyColor: [0, 100, 85],
-					angle: 0,
-					offset: 17
-				},
-				xp: {
-					amount: 100,
-					maximum: 100,
-					filledColor: [115, 100, 17],
-					midColor: [115, 100, 35],
-					emptyColor: [115, 100, 65],
-					angle: -90,
-					offset: 12
-				}
+		avatar: null,
+		avatarRules: [
+			value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+		],
+		abilities: [
+			{
+				name: "Intelligence",
+				icon: "brain"
+			},
+			{
+				name: "Wisdom",
+				icon: "thought-bubble-outline"
+			},
+			{
+				name: "Charisma",
+				icon: "emoticon-wink-outline"
 			}
-		}
+		],
+		skills: [
+			{
+				name: "Descriptiveness",
+				ability: "Intelligence",
+				isProficient: false,
+			},
+			{
+				name: "Reasoning",
+				ability: "Intelligence",
+				isProficient: false,
+			},
+			{
+				name: "Roleplaying",
+				ability: "Wisdom",
+				isProficient: false,
+			},
+			{
+				name: "Morality",
+				ability: "Wisdom",
+				isProficient: false,
+			},
+			{
+				name: "Accents",
+				ability: "Charisma",
+				isProficient: false,
+			},
+			{
+				name: "Persuasiveness",
+				ability: "Charisma",
+				isProficient: false,
+			},
+		]
 	}),
 	computed: {
 		getAttackGradient() {
@@ -216,12 +198,18 @@ export default {
 				if (gradientStops.indexOf(stop) < gradientStops.length - 1) gradient += ", ";
 			}
 			gradient += ")"
-			console.log(gradient);
+			// console.log(gradient);
 			return {
 				background: gradient,
 				"-webkit-background-clip": "text",
 				"-webkit-text-fill-color": "transparent"
 			}
+		},
+		uploadAvatar(avatar) {
+			this.avatar = avatar;
+		},
+		saveAvatar() {
+			// this.character.image = this.avatar;
 		}
 	}
 }
