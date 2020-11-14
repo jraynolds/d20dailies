@@ -31,7 +31,7 @@
 export default {
 	props: [ 
 		"tutorial",
-		"tutorialOpenOnStart"
+		"openOnStart"
 	],
 	data: () => ({
 		index: 0,
@@ -55,7 +55,7 @@ export default {
 		},
 	},
 	mounted() {
-		this.dialog = this.tutorialOpenOnStart;
+		this.dialog = this.openOnStart;
 	}
 }
 </script>

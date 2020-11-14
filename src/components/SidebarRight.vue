@@ -1,12 +1,4 @@
 <template>
-	<!-- <v-navigation-drawer
-		clipped
-		v-model="open"
-		absolute
-		right
-		:width="400"
-		mini-variant
-	> -->
 	<v-navigation-drawer
 		permanent
 		v-model="open"
@@ -37,8 +29,6 @@
 				<Charsheet :player="player" :character="character" :includeEquipment="false" />
 			</v-col>
 		</v-row>
-		<!-- <v-col class="mt-8">
-		</v-col> -->
 	</v-navigation-drawer>
 </template>
 

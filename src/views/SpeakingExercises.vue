@@ -14,6 +14,7 @@
 
 <script>
 export default {
+	props: [ "tutorialOpenOnStart" ],
 	components: {
 		TutorialDialog: () => import("@/components/TutorialDialog.vue"),
 		Exercise: () => import("@/components/Exercise.vue")

@@ -23,6 +23,12 @@ export default {
 		rDrawerOpen: true,
 		player: {
 			name: "Jasper Raynolds",
+			tutorials: {
+				speaking: false,
+				description: false,
+				accent: false,
+				trolley: false
+			}
 		},
 		character: {
 			class: "Paladin",

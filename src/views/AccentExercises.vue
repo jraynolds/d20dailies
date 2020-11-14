@@ -1,11 +1,11 @@
 <template>
 	<v-container>
 		<v-row text-center>
-			<TutorialDialog :tutorial="dialog" :tutorialOpenOnStart="tutorialOpenOnStart" />
+			<TutorialDialog :tutorial="dialog" :openOnStart="tutorialOpenOnStart" />
 
 			<v-spacer />
 			<v-col lg="6" sm="8">
-				<Exercise :exercise="exercise" />
+				<Exercise :exercise="exercise" : />
 			</v-col>
 			<v-spacer />
 		</v-row>
@@ -14,12 +14,12 @@
 
 <script>
 export default {
+	props: [ "tutorialOpenOnStart" ],
 	components: {
 		TutorialDialog: () => import("@/components/TutorialDialog.vue"),
 		Exercise: () => import("@/components/Exercise.vue")
 	},
   data: () => ({
-		tutorialOpenOnStart: true,
 		exercise: {
 			title: "Accent Practice",
 			preamble: [
