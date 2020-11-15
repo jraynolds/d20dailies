@@ -20,7 +20,6 @@ export default {
 		Exercise: () => import("@/components/Exercise.vue")
 	},
   data: () => ({
-		tutorialOpenOnStart: true,
 		exercise: {
 			title: "Speaking Exercises",
 			preamble: [

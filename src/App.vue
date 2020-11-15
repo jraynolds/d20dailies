@@ -1,8 +1,7 @@
 <template>
   <v-app>
-		<Appbar @drawerclicked="drawerOpen = !drawerOpen" />
-		<Sidebar :drawerOpen.sync="drawerOpen" />
-		<SidebarRight :rDrawerOpen.sync="rDrawerOpen" :player="player" :character="character" />
+		<Appbar :title="'D and Dailies'" />
+		<Sidebar :player="player" :character="character" />
 
     <v-main>
       <router-view />
@@ -15,8 +14,7 @@ export default {
   name: 'App',
   components: {
     Appbar: () => import("@/components/Appbar.vue"),
-    Sidebar: () => import("@/components/Sidebar.vue"),
-    SidebarRight: () => import("@/components/SidebarRight.vue")
+    Sidebar: () => import("@/components/Sidebar.vue")
   },
   data: () => ({
     drawerOpen: null,
