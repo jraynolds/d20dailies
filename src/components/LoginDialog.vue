@@ -39,9 +39,19 @@
 							</v-col>
 							<v-col class="fill-width">
 								<v-btn 
+									v-if="!isLoading"
 									color="primary" 
 									:disabled="!login.isValid" 
 									@click="loginUser()"
+									width="100%"
+								>
+									Log In
+								</v-btn>
+								<v-btn
+									v-else
+									color="primary" 
+									disabled
+									loading
 									width="100%"
 								>
 									Log In
@@ -90,12 +100,22 @@
 								</v-col>
 								<v-col>
 									<v-btn 
+										v-if="!isLoading"
 										color="primary" 
 										:disabled="!register.isValid" 
 										@click="registerUser()"
 										style="width: 100%"
 									>
 										Register
+									</v-btn>
+									<v-btn
+										v-else
+										color="primary" 
+										disabled
+										loading
+										width="100%"
+									>
+										Log In
 									</v-btn>
 								</v-col>
 							</v-form>
@@ -112,6 +132,7 @@ export default {
 	props: [ "dialog" ],
 	data: () => ({
 		open: false,
+		isLoading: false,
 		tab: null,
 		selectedTabColor: "hsl(230, 100%, 95%)",
 		register: {
@@ -164,15 +185,23 @@ export default {
 	methods: {
 		registerUser() {
 			this.$store.dispatch('signUp', {
-				email: this.register.email,
-				password: this.register.password
+				email: this.register.email.text,
+				password: this.register.password.text
 			})
 		},
 		loginUser() {
+			this.isLoading = true;
 			this.$store.dispatch('signIn', {
-				email: this.register.email,
-				password: this.register.password
-			})
+				email: this.login.email.text,
+				password: this.login.password.text
+			}).then(successful => {
+				console.log(successful);
+				if (successful) {
+					this.$router.push("account");
+					this.open = false;
+					this.isLoading = false;
+				}
+			});
 		}
 	},
 	watch: {
@@ -181,7 +210,7 @@ export default {
 		},
 		open(val) {
 			this.$emit("update:dialog", val);
-		}
+		},	
 	},
 	mounted() {
 		this.open = this.dialog;

@@ -5,7 +5,7 @@
 
 			<v-spacer />
 			<v-col lg="6" sm="8">
-				<Exercise :exercise="exercise" : />
+				<Exercise :exercise="exercise" />
 			</v-col>
 			<v-spacer />
 		</v-row>

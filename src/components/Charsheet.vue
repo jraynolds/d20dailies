@@ -1,5 +1,5 @@
 <template>
-	<v-container>
+	<v-container v-if="character">
 
 		<v-row id="avatar" class="align-center">
 			<v-col class="flex-grow-0 mr-n6">
@@ -8,10 +8,10 @@
 				</v-btn>
 			</v-col>
 			<v-col class="flex-grow-1 text-center">
-				<v-icon v-if="!character.image" style="font-size: 220px;">mdi-account</v-icon>
+				<v-icon v-if="!image" style="font-size: 220px;">mdi-account</v-icon>
 				<v-img 
 					v-else 
-					:src="character.image"
+					:src="image"
 					width="220"
 					height="220"
 					style="margin-left: auto; margin-right: auto;"
@@ -64,7 +64,12 @@
 			</v-col>
 			
 			<v-col cols="4">
-				<v-icon style="font-size: 100px;" :style="getXPGradient">mdi-chart-bar</v-icon>
+				<v-icon 
+					style="font-size: 100px; -webkit-transform: scaleX(-1); transform: scaleX(-1);" 
+					:style="getXPGradient"
+				>
+					mdi-chart-bar
+				</v-icon>
 			</v-col>
 		</v-row>
 
@@ -106,7 +111,7 @@
 
 <script>
 export default {
-	props: [ "player", "character", "includeEquipment" ],
+	props: [ "includeEquipment" ],
 	data: () => ({
 		avatar: null,
 		avatarRules: [
@@ -157,27 +162,59 @@ export default {
 				ability: "Charisma",
 				isProficient: false,
 			},
-		]
+		],
+		stats: {
+			hp: {
+				filledColor: [0, 100, 39],
+				midColor: [0, 100, 65],
+				emptyColor: [0, 100, 85],
+				angle: 0,
+				offset: 17
+			},
+			attack: {
+				filledColor: [235, 100, 39],
+				midColor: [235, 100, 65],
+				emptyColor: [235, 100, 85],
+				angle: 315,
+				offset: 22
+			},
+			xp: {
+				filledColor: [115, 100, 17],
+				midColor: [115, 100, 35],
+				emptyColor: [115, 100, 65],
+				angle: -90,
+				offset: 12
+			}
+		}
 	}),
 	computed: {
 		getAttackGradient() {
-			let stat = this.character.stats.attack;
-			return this.getGradient(stat);
+			return this.getGradient("attack");
 		},
 		getHPGradient() {
-			let stat = this.character.stats.hp;
-			return this.getGradient(stat);
+			return this.getGradient("hp");
 		},
 		getXPGradient() {
-			let stat = this.character.stats.xp;
-			return this.getGradient(stat);
+			return this.getGradient("xp");
+		},
+		player() {
+			return this.$store.getters.getPlayer;
+		},
+		character() {
+			return this.$store.getters.getCharacter;
+		},
+		image() {
+			return this.$store.getters.getCharacterImage;
 		}
 	},
 	methods: {
 		getGradient(stat) {
+			let characterStat = this.character.stats[stat];
+			stat = this.stats[stat];
+
 			let angle = `${stat.angle}deg`;
 			let range = 100 - stat.offset;
-			let stopLocation = stat.amount / stat.maximum * range;
+			let stopLocation = characterStat.value / characterStat.max * range;
 			let gradientStops = [
 				{
 					color: `hsl(${stat.filledColor[0]}, ${stat.filledColor[1]}%, ${stat.filledColor[2]}%)`,

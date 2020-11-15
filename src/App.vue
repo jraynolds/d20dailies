@@ -1,7 +1,7 @@
 <template>
   <v-app>
 		<Appbar :title="'D and Dailies'" />
-		<Sidebar :player="player" :character="character" />
+		<Sidebar v-if="$store.getters.isUserAuth" />
 
     <v-main>
       <router-view />
@@ -54,30 +54,15 @@ export default {
 			stats: {
 				attack: {
 					amount: 40,
-					maximum: 40,
-					filledColor: [235, 100, 39],
-					midColor: [235, 100, 65],
-					emptyColor: [235, 100, 85],
-					angle: 315,
-					offset: 22
+					maximum: 40
 				},
 				hp: {
 					amount: 80,
-					maximum: 80,
-					filledColor: [0, 100, 39],
-					midColor: [0, 100, 65],
-					emptyColor: [0, 100, 85],
-					angle: 0,
-					offset: 17
+					maximum: 80
 				},
 				xp: {
 					amount: 100,
-					maximum: 100,
-					filledColor: [115, 100, 17],
-					midColor: [115, 100, 35],
-					emptyColor: [115, 100, 65],
-					angle: -90,
-					offset: 12
+					maximum: 100
 				}
 			}
 		},

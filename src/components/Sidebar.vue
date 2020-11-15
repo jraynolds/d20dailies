@@ -26,7 +26,7 @@
 				style="overflow: hidden;" 
 				:class="[$vuetify.breakpoint.mdAndDown ? 'ml-n4' : '']"
 			>
-				<Charsheet :player="player" :character="character" :includeEquipment="false" />
+				<Charsheet :includeEquipment="false" />
 			</v-col>
 		</v-row>
 	</v-navigation-drawer>
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-	props: [ "player", "character", "rDrawerOpen" ],
+	props: [ "rDrawerOpen" ],
 	components: {
 		Charsheet: () => import("@/components/Charsheet.vue")
 	},
