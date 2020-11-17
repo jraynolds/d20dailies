@@ -18,7 +18,6 @@ export default {
   },
   data: () => ({
     drawerOpen: null,
-		rDrawerOpen: true,
 		player: {
 			name: "Jasper Raynolds",
 			tutorials: {

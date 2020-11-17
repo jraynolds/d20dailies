@@ -1,5 +1,6 @@
 <template>
 	<v-navigation-drawer
+		v-if="$route.name != 'Account'"
 		permanent
 		v-model="open"
 		right

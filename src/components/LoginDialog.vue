@@ -1,5 +1,5 @@
 <template>
-	<v-dialog v-model="open" width="400">
+	<v-dialog v-model="dialog" width="400">
 		<v-card>
 			<v-tabs v-model="tab">
 				<v-col v-for="(item, index) of items" :key="item" class="pa-0">
@@ -56,6 +56,13 @@
 								>
 									Log In
 								</v-btn>
+								<v-card-text 
+									v-if="login.error" 
+									class="text-center mb-n4" 
+									style="font-style: italic; color: red; font-size: small; width: 100%;"
+								>
+									{{ errorConversion }}
+								</v-card-text>
 							</v-col>
 						</v-form>
 					</v-row>
@@ -115,8 +122,15 @@
 										loading
 										width="100%"
 									>
-										Log In
+										Register
 									</v-btn>
+									<v-card-text 
+										v-if="register.error" 
+										class="text-center mb-n4" 
+										style="font-style: italic; color: red; font-size: small; width: 100%;"
+									>
+										{{ errorConversion }}
+									</v-card-text>
 								</v-col>
 							</v-form>
 						</v-row>
@@ -129,12 +143,28 @@
 
 <script>
 export default {
-	props: [ "dialog" ],
 	data: () => ({
-		open: false,
 		isLoading: false,
 		tab: null,
 		selectedTabColor: "hsl(230, 100%, 95%)",
+		errorConversions: [
+			{ 
+				original: "The password is invalid or the user does not have a password.",
+				converted: "Incorrect password."
+			},
+			{
+				original: "There is no user record corresponding to this identifier. The user may have been deleted.",
+				converted: "No user with that email exists."
+			},
+			{
+				original: "The email address is already in use by another account.",
+				converted: "A user with that email already exists."
+			},
+			{
+				original: "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later.",
+				converted: "Too many failed login attempts. Try later or reset your password."
+			}
+		],
 		register: {
 			isValid: false,
 			email: {
@@ -159,6 +189,7 @@ export default {
 		},
 		login: {
 			isValid: false,
+			error: null,
 			email: {
 				text: '',
 				rules: [
@@ -180,6 +211,25 @@ export default {
 		matchingPasswords() {
 			if (this.register.password.text === this.register.password2.text) return true;
 			return "Passwords must match!"
+		},
+		errorConversion() {
+			for (let conversion of this.errorConversions) {
+				if (
+					conversion.original == this.login.error || 
+					conversion.original == this.register.error
+				) {
+					return conversion.converted;
+				}
+			}
+			return "Error.";
+		},
+		dialog: {
+			get: function() {
+				return this.$store.getters.getLoginDialogOpen;
+			},
+			set: function(val) {
+				this.$store.commit('setLoginDialogOpen', val);
+			}
 		}
 	},
 	methods: {
@@ -187,33 +237,39 @@ export default {
 			this.$store.dispatch('signUp', {
 				email: this.register.email.text,
 				password: this.register.password.text
-			})
+			}).then(response => {
+				console.log(response);
+				if (response.successful) {
+					this.$router.push("account");
+					this.dialog = false;
+					this.isLoading = false;
+				} else {
+					this.login.error = response.error;
+					this.isLoading = false;
+				}
+			});
 		},
 		loginUser() {
 			this.isLoading = true;
 			this.$store.dispatch('signIn', {
 				email: this.login.email.text,
 				password: this.login.password.text
-			}).then(successful => {
-				console.log(successful);
-				if (successful) {
+			}).then(response => {
+				console.log(response);
+				if (response.successful) {
 					this.$router.push("account");
-					this.open = false;
+					this.dialog = false;
+					this.isLoading = false;
+				} else {
+					this.login.error = response.error;
 					this.isLoading = false;
 				}
 			});
 		}
 	},
 	watch: {
-		dialog(val) {
-			this.open = val;
-		},
-		open(val) {
-			this.$emit("update:dialog", val);
-		},	
 	},
 	mounted() {
-		this.open = this.dialog;
 	}
 }
 </script>

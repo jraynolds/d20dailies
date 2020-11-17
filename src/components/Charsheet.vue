@@ -25,8 +25,8 @@
 						label="Upload avatar"
 						@change="uploadAvatar"
 					></v-file-input>
-					<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar">
-						<v-icon large>mdi-upload</v-icon>
+					<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar()">
+						<v-icon large>mdi-content-save</v-icon>
 					</v-btn>
 				</v-row>
 			</v-col>
@@ -37,18 +37,27 @@
 			</v-col>
 		</v-row>
 
-		<v-row id="details">
+		<v-row id="name" class="mb-n4">
+			<v-col class="mb-n4">
+				<v-text-field
+					label="Name"
+					:value="character.name"
+				/>
+			</v-col>
+		</v-row>
+
+		<v-row id="details" class="mb-n4">
 			<v-col>
 				<v-text-field
-					label="Class and Level"
-					:value="character.class + ' ' + character.level"
+					label="Class"
+					:value="character.class"
 					disabled
 				/>
 			</v-col>
 			<v-col>
 				<v-text-field
-					label="Experience points"
-					:value="character.experience"
+					label="Level"
+					:value="character.level"
 					disabled
 				/>
 			</v-col>
@@ -92,7 +101,9 @@
 									<v-col class="flex-grow-0">
 										{{ character.skills[skill.name.toLowerCase()] }}
 									</v-col>
-									<v-col>{{ skill.name }}</v-col>
+									<router-link :to="skill.name.toLowerCase()">
+										<v-col>{{ skill.name }}</v-col>
+									</router-link>
 								</v-row>
 							</v-col>
 						</v-col>
@@ -100,8 +111,8 @@
 				</v-card>
 			</v-col>
 
-			<v-col id="equipment" v-if="includeEquipment">
-				<v-icon style="font-size: 350px;">mdi-human</v-icon>
+			<v-col id="equipment" v-if="includeEquipment" class="text-center">
+				<v-icon style="font-size: 350px;" class="text-center">mdi-human</v-icon>
 			</v-col>
 
 		</v-row>
@@ -133,12 +144,12 @@ export default {
 		],
 		skills: [
 			{
-				name: "Descriptiveness",
+				name: "Description",
 				ability: "Intelligence",
 				isProficient: false,
 			},
 			{
-				name: "Reasoning",
+				name: "Tactics",
 				ability: "Intelligence",
 				isProficient: false,
 			},
@@ -153,12 +164,12 @@ export default {
 				isProficient: false,
 			},
 			{
-				name: "Accents",
+				name: "Accent",
 				ability: "Charisma",
 				isProficient: false,
 			},
 			{
-				name: "Persuasiveness",
+				name: "Persuasion",
 				ability: "Charisma",
 				isProficient: false,
 			},
@@ -246,7 +257,7 @@ export default {
 			this.avatar = avatar;
 		},
 		saveAvatar() {
-			// this.character.image = this.avatar;
+			this.$store.dispatch("uploadAvatar", this.avatar);
 		}
 	}
 }

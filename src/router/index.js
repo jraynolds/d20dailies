@@ -11,29 +11,44 @@ const routes = [
     component: Main
   },
   {
-    path: '/speaking',
-    name: 'Speaking Exercises',
-    component: () => import('../views/SpeakingExercises.vue')
+    path: '/account',
+    name: 'Account',
+    component: () => import('../views/Account.vue')
+  },
+  {
+    path: '/roleplaying',
+    name: 'Roleplaying Exercises',
+    component: () => import('../views/Roleplaying.vue')
   },
   {
     path: '/accent',
     name: 'Accent Exercises',
-    component: () => import('../views/AccentExercises.vue')
+    component: () => import('../views/Accent.vue')
   },
   {
     path: '/description',
     name: 'Descriptive Exercises',
-    component: () => import('../views/DescriptionExercises.vue')
+    component: () => import('../views/Description.vue')
   },
   {
-    path: '/trolley',
+    path: '/morality',
     name: 'Trolley Problems',
-    component: () => import('../views/TrolleyExercises.vue')
+    component: () => import('../views/Morality.vue')
   },
   {
-    path: '/combat',
-    name: 'Combat Tests',
-    component: () => import('../views/CombatTests.vue')
+    path: '/tactics',
+    name: 'Tactics',
+    component: () => import('../views/Tactics.vue')
+  },
+  {
+    path: '/persuasion',
+    name: 'Persuasion',
+    component: () => import('../views/Persuasion.vue')
+  },
+  {
+    path: '/dungeon',
+    name: 'Dungeon',
+    component: () => import('../views/Dungeon.vue')
   }
 ]
 
