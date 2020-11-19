@@ -149,11 +149,11 @@ export default {
 		selectedTabColor: "hsl(230, 100%, 95%)",
 		errorConversions: [
 			{ 
-				original: "The password is invalid or the user does not have a password.",
+				original: "auth/wrong-password",
 				converted: "Incorrect password."
 			},
 			{
-				original: "There is no user record corresponding to this identifier. The user may have been deleted.",
+				original: "auth/user-not-found",
 				converted: "No user with that email exists."
 			},
 			{
@@ -234,6 +234,7 @@ export default {
 	},
 	methods: {
 		registerUser() {
+			this.isLoading = true;
 			this.$store.dispatch('signUp', {
 				email: this.register.email.text,
 				password: this.register.password.text
@@ -244,7 +245,7 @@ export default {
 					this.dialog = false;
 					this.isLoading = false;
 				} else {
-					this.login.error = response.error;
+					this.login.error = response.error.code;
 					this.isLoading = false;
 				}
 			});
@@ -261,7 +262,7 @@ export default {
 					this.dialog = false;
 					this.isLoading = false;
 				} else {
-					this.login.error = response.error;
+					this.login.error = response.error.code;
 					this.isLoading = false;
 				}
 			});

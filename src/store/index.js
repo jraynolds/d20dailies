@@ -1,14 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import firebase from 'firebase/app'
-require('firebase/auth')
-require('firebase/firestore')
-require('firebase/storage')
+import createPersistedState from "vuex-persistedstate"
+import Cookies from "js-cookie"
+import router from "@/router/index"
+import { 
+	auth, 
+	// playersCollection,
+	charactersCollection,
+	dungeonsCollection
+} from "@/plugins/firebase"
+import { playersCollection } from '../plugins/firebase'
 
 Vue.use(Vuex)
 
 const newPlayer = {
-	email: "",
+	user: "",
+	avatar: "",
 	tutorials: {
 		accent: true,
 		description: true,
@@ -17,143 +24,160 @@ const newPlayer = {
 		persuasion: true,
 		tactics: true
 	},
-	characters: [
-		{
-			name: "",
-			level: 0,
-			class: "",
-			alignment: "",
-			inspiration: false,
-			imageRef: "",
-			abilities: {
-				charisma: 0,
-				intelligence: 0,
-				wisdom: 0
-			},
-			skills: {
-				accent: 0,
-				description: 0,
-				morality: 0,
-				persuasion: 0,
-				tactics: 0,
-				roleplaying: 0
-			},
-			stats: {
-				attack: {
-					value: 1,
-					max: 1
-				},
-				hp: {
-					value: 1,
-					max: 1
-				},
-				xp: {
-					value: 1,
-					max: 1
-				}
-			}
-		}
-	]
 }
 
-const newDungeon = {
-	rooms: [
-		{ 
-			height: 5,
-			width: 5,
-			isLit: true,
-			isShown: true,
-			loc: [18, 31], 
-			doors: [ 
-				{ loc: [18, 33], isShown: true },
-				{ loc: [21, 31], isShown: true },
-				{ loc: [22, 34], isShown: true },
-				{ loc: [], isShown: false }
-			],
-			quadrant: "BOTTOM",
-			pathTo: [],
-			pathsFrom: []
-		},
-		{ 
-			height: 8,
-			width: 4,
-			isLit: false, 
-			isShown: true,
-			loc: [8, 20], 
-			doors: [ 
-				{ loc: [], isShown: false },
-				{ loc: [], isShown: false },
-				{ loc: [], isShown: false },
-				{ loc: [9, 27], isShown: true }
-			],
-			quadrant: "LEFT",
-			pathTo: [ {0:17,1:33}, {0:16,1:33}, {0:15,1:33}, {0:14,1:33}, {0:13,1:33}, {0:12,1:33}, {0:12,1:33}, {0:11,1:33}, {0:10,1:33}, {0:9,1:33}, {0:9,1:32}, {0:9,1:31}, {0:9,1:30}, {0:9,1:29}, {0:9,1:28} ],
-			pathsFrom: []
-		},
-		{ 
-			height: 4,
-			width: 7,
-			isLit: false, 
-			isShown: true,
-			loc: [8, 2], 
-			doors: [ 
-				{ loc: [], isShown: false },
-				{ loc: [], isShown: false },
-				{ loc: [14, 4], isShown: true },
-				{ loc: [], isShown: false }
-			],
-			quadrant: "TOP",
-			pathTo: [ {0:21,1:30}, {0:21,1:29}, {0:21,1:28}, {0:21,1:27}, {0:21,1:26}, {0:21,1:25}, {0:21,1:24}, {0:21,1:23}, {0:21,1:22}, {0:21,1:21}, {0:21,1:20}, {0:21,1:19}, {0:21,1:18}, {0:21,1:17}, {0:21,1:16}, {0:21,1:15}, {0:21,1:14}, {0:21,1:13}, {0:20,1:13}, {0:19,1:13}, {0:18,1:13}, {0:18,1:12}, {0:18,1:11}, {0:18,1:10}, {0:18,1:9}, {0:18,1:8}, {0:17,1:8}, {0:16,1:8}, {0:16,1:7}, {0:16,1:6}, {0:16,1:5}, {0:16,1:4}, {0:15,1:4} ],
-			pathsFrom: []
-		},
-		{ 
-			height: 4,
-			width: 4,
-			isLit: false, 
-			isShown: true,
-			loc: [33, 25], 
-			doors: [ 
-				{ loc: [33, 27], isShown: true },
-				{ loc: [], isShown: false },
-				{ loc: [], isShown: false },
-				{ loc: [], isShown: false }
-			],
-			quadrant: "RIGHT",
-			pathTo: [ {0:22,1:34}, {0:23,1:34}, {0:24,1:34}, {0:25,1:34}, {0:26,1:34}, {0:27,1:34}, {0:28,1:34}, {0:29,1:34}, {0:30,1:34}, {0:30,1:33}, {0:30,1:32}, {0:30,1:31}, {0:30,1:30}, {0:30,1:29}, {0:30,1:28}, {0:30,1:27}, {0:31,1:27}, {0:32,1:27} ],
-			pathsFrom: []
-		}
-	]
-}
+// const newCharacter = {
+// 	name: "New Character",
+// 	user: "",
+// 	level: 0,
+// 	class: "",
+// 	alignment: "",
+// 	inspiration: false,
+// 	avatar: "",
+// 	abilities: {
+// 		charisma: 0,
+// 		intelligence: 0,
+// 		wisdom: 0
+// 	},
+// 	skills: {
+// 		accent: 0,
+// 		description: 0,
+// 		morality: 0,
+// 		persuasion: 0,
+// 		tactics: 0,
+// 		roleplaying: 0
+// 	},
+// 	stats: {
+// 		attack: {
+// 			value: 1,
+// 			max: 1
+// 		},
+// 		hp: {
+// 			value: 1,
+// 			max: 1
+// 		},
+// 		xp: {
+// 			value: 1,
+// 			max: 1
+// 		}
+// 	}
+// }
+
+// const newDungeon = {
+// 	user: "",
+// 	rooms: [
+// 		{ 
+// 			height: 5,
+// 			width: 5,
+// 			isLit: true,
+// 			isShown: true,
+// 			loc: [18, 31], 
+// 			doors: [ 
+// 				{ loc: [18, 33], isShown: true },
+// 				{ loc: [21, 31], isShown: true },
+// 				{ loc: [22, 34], isShown: true },
+// 				{ loc: [], isShown: false }
+// 			],
+// 			quadrant: "BOTTOM",
+// 			pathTo: [],
+// 			pathsFrom: []
+// 		},
+// 		{ 
+// 			height: 8,
+// 			width: 4,
+// 			isLit: false, 
+// 			isShown: true,
+// 			loc: [8, 20], 
+// 			doors: [ 
+// 				{ loc: [], isShown: false },
+// 				{ loc: [], isShown: false },
+// 				{ loc: [], isShown: false },
+// 				{ loc: [9, 27], isShown: true }
+// 			],
+// 			quadrant: "LEFT",
+// 			pathTo: [ {0:17,1:33}, {0:16,1:33}, {0:15,1:33}, {0:14,1:33}, {0:13,1:33}, {0:12,1:33}, {0:12,1:33}, {0:11,1:33}, {0:10,1:33}, {0:9,1:33}, {0:9,1:32}, {0:9,1:31}, {0:9,1:30}, {0:9,1:29}, {0:9,1:28} ],
+// 			pathsFrom: []
+// 		},
+// 		{ 
+// 			height: 4,
+// 			width: 7,
+// 			isLit: false, 
+// 			isShown: true,
+// 			loc: [8, 2], 
+// 			doors: [ 
+// 				{ loc: [], isShown: false },
+// 				{ loc: [], isShown: false },
+// 				{ loc: [14, 4], isShown: true },
+// 				{ loc: [], isShown: false }
+// 			],
+// 			quadrant: "TOP",
+// 			pathTo: [ {0:21,1:30}, {0:21,1:29}, {0:21,1:28}, {0:21,1:27}, {0:21,1:26}, {0:21,1:25}, {0:21,1:24}, {0:21,1:23}, {0:21,1:22}, {0:21,1:21}, {0:21,1:20}, {0:21,1:19}, {0:21,1:18}, {0:21,1:17}, {0:21,1:16}, {0:21,1:15}, {0:21,1:14}, {0:21,1:13}, {0:20,1:13}, {0:19,1:13}, {0:18,1:13}, {0:18,1:12}, {0:18,1:11}, {0:18,1:10}, {0:18,1:9}, {0:18,1:8}, {0:17,1:8}, {0:16,1:8}, {0:16,1:7}, {0:16,1:6}, {0:16,1:5}, {0:16,1:4}, {0:15,1:4} ],
+// 			pathsFrom: []
+// 		},
+// 		{ 
+// 			height: 4,
+// 			width: 4,
+// 			isLit: false, 
+// 			isShown: true,
+// 			loc: [33, 25], 
+// 			doors: [ 
+// 				{ loc: [33, 27], isShown: true },
+// 				{ loc: [], isShown: false },
+// 				{ loc: [], isShown: false },
+// 				{ loc: [], isShown: false }
+// 			],
+// 			quadrant: "RIGHT",
+// 			pathTo: [ {0:22,1:34}, {0:23,1:34}, {0:24,1:34}, {0:25,1:34}, {0:26,1:34}, {0:27,1:34}, {0:28,1:34}, {0:29,1:34}, {0:30,1:34}, {0:30,1:33}, {0:30,1:32}, {0:30,1:31}, {0:30,1:30}, {0:30,1:29}, {0:30,1:28}, {0:30,1:27}, {0:31,1:27}, {0:32,1:27} ],
+// 			pathsFrom: []
+// 		}
+// 	]
+// }
 
 const initialState = () => {
 	return {
 		user: null,
 		player: null,
+		playerDocRef: null,
 		dungeon: null,
+		characters: [],
 		activeCharacter: 0,
-		activeCharacterImage: null,
 		error: null,
 		loginDialog: false
 	}
 }
 
 export default new Vuex.Store({
+	plugins: [createPersistedState({
+		storage: {
+			getItem: (key) => Cookies.get(key),
+			setItem: (key, value) => Cookies.set(
+				key, value, { expires: 7, secure: true }
+			),
+			removeItem: (key) => Cookies.remove(key)
+		}
+	})],
 	state: initialState(),
 	getters: {
-		getCharacter(state) {
-			if (state.player) {
-				return state.player.characters[state.activeCharacter];
-			}
-			return null;
+		getActiveCharacter(state) {
+			return state.characters[state.activeCharacter];
 		},
-		getCharacterImage(state) {
-			return state.activeCharacterImage;
+		getActiveCharacterAvatar(state) {
+			if (state.characters.length == 0) return null;
+			return state.characters[state.activeCharacter].avatar;
+		},
+		getPlayerAvatar(state) {
+			if (!state.player) return null;
+			return state.player.avatar;
 		},
 		getUser(state) {
 			return state.user;
 		},
 		getUserID(state) {
-			return state.player.id;
+			if (!state.user) return null;
+			return state.user.uid;
+		},
+		getPlayerDocRef(state) {
+			return state.playerDocRef;
 		},
 		getPlayer(state) {
 			return state.player;
@@ -178,11 +202,14 @@ export default new Vuex.Store({
 		setPlayer(state, player) {
 			state.player = player;
 		},
+		setPlayerDocRef(state, playerDocRef) {
+			state.playerDocRef = playerDocRef;
+		},
+		setCharacters(state, characters) {
+			state.characters = characters;
+		},
 		setActiveCharacter(state, index) {
 			state.activeCharacter = index;
-		},
-		setCharacterImage(state, imageURL) {
-			state.activeCharacterImage = imageURL;
 		},
 		setError(state, error) {
 			state.error = error;
@@ -195,171 +222,402 @@ export default new Vuex.Store({
 		}
   },
   actions: {
-		signUp({ commit, dispatch }, payload) {
-			console.log("We're signing up a user.");
-			console.log(payload);
-			return firebase
-				.auth()
-				.createUserWithEmailAndPassword(payload.email, payload.password)
-				.then(response => {
-					commit("setUser", response.user);
-					// Create new user
-					console.log(response.user);
-					dispatch("loadPlayer", payload.email);
-					return { successful: true };
-				})
-				.catch(error => {
-					commit("setError", error.message);
-					console.log(error.message);
-					return { successful: false, error: error.message };
-				});
+		/* eslint-disable no-empty-pattern */
+		// signUp({ commit, dispatch }, payload) {
+		// 	console.log("We're signing up a user.");
+		// 	console.log(payload);
+
+		// 	return dispatch("createNewUser", payload).then(response => {
+		// 		if (response.successful) {
+		// 			commit("setUser", response.user);
+		// 			return dispatch("createNewPlayer", response.user.uid).then(response => {
+		// 				commit("setPlayer", response.player);
+		// 				commit("setPlayerDocRef", response.id);
+		// 				return { successful: true };
+		// 			}).catch(error => {
+		// 				console.log("We've failed!");
+		// 				console.log(error);
+		// 				return { successful: false, error: error };
+		// 			});
+		// 		} else {
+		// 			console.log("We've failed!");
+		// 			console.log(response.error);
+		// 			return { successful: false, error: response.error };
+		// 		}
+		// 	}).catch(error => {
+		// 		console.log("We've failed!");
+		// 		console.log(error);
+		// 		return { successful: false, error: error };
+		// 	});
+		// },
+		// signIn({ commit, dispatch }, payload) {
+		// 	console.log("We're signing in a user.");
+		// 	console.log(payload);
+
+		// 	return auth
+		// 		.signInWithEmailAndPassword(payload.email, payload.password)
+		// 		.then(response => {
+		// 			console.log("We've signed in a user.");
+		// 			commit("setUser", response.user);
+		// 			return dispatch("getPlayerByUser", response.user.uid).then(querySnapshot => {
+		// 				commit("setPlayer", querySnapshot.docs[0].data());
+		// 				commit("setPlayerDocRef", querySnapshot.docs[0].id);
+						
+		// 				// THESE ARE NOT WAITED ON
+		// 				let characters = [];
+		// 				dispatch("getCharacters")
+		// 					.then(querySnapshot => {
+		// 						querySnapshot.forEach(doc => {
+		// 							characters.push(doc.data());
+		// 						})
+		// 						console.log(`Got ${characters.length} characters for this player.`);
+		// 						commit("setCharacters", characters)
+		// 					}).catch(error => {
+		// 						console.log("Couldn't get characters!")
+		// 						console.log(error);
+		// 						return { successful: false, error: error };
+		// 					}); 
+		// 				dispatch("getDungeon").then(querySnapshot => {
+		// 					if (!querySnapshot.empty) {
+		// 						console.log("Got a dungeon for this player.");
+		// 						commit("setDungeon", querySnapshot.docs[0].data());
+		// 					}
+		// 				}); 
+		// 				// THESE ARE NOT WAITED ON
+						
+		// 				return { successful: true };
+		// 			}).catch(error => {
+		// 				console.log("We've failed!");
+		// 				console.log(error);
+		// 				return { successful: false, error: error };
+		// 			});
+		// 		}).catch(error => {
+		// 			console.log("We've failed!");
+		// 			console.log(error);
+		// 			return { successful: false, error: error };
+		// 		});
+		// },
+		// signOut({ commit }) {
+		// 	firebase
+		// 		.auth()
+		// 		.signOut()
+		// 		.then(() => {
+		// 			commit("setUser", null);
+		// 		})
+		// 		.catch(error => {
+		// 			commit("setError", error.message);
+		// 		});
+		// },
+
+		// GETTING OPERATIONS
+
+		async signUp({ dispatch, commit }, payload) {
+			let user;
+			try {
+				let response = await auth
+					.createUserWithEmailAndPassword(payload.email, payload.password);
+				user = response.user;
+				commit("setUser", user);
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+
+			try {
+				let response = await dispatch("createNewPlayer", user.uid);
+				commit("setPlayer", response.player);
+				commit("setPlayerDocRef", response.id);
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+
+			return { successful: true };
 		},
-		signIn({ commit, dispatch }, payload) {
-			console.log("We're signing in a user.");
-			console.log(payload);
-			return firebase
-				.auth()
-				.signInWithEmailAndPassword(payload.email, payload.password)
-				.then(response => {
-					commit("setUser", response.user);
-					console.log(response.user);
-					return dispatch("loadPlayer", payload.email );
-				})
-				.catch(error => {
-					commit("setError", error.message);
-					console.log(error.message);
-					return { successful: false, error: error.message };
-				});
+
+		async signIn({ dispatch }, payload) {
+			let user;
+			try {
+				let response = await auth.signInWithEmailAndPassword(payload.email, payload.password);
+				user = response.user;
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+
+			dispatch('loadAll', user);
+			return { successful: true };
 		},
-		signOut({ commit }) {
-			firebase
-				.auth()
-				.signOut()
-				.then(() => {
-					commit("setUser", null);
-				})
-				.catch(error => {
-					commit("setError", error.message);
-				});
+		
+		async signOut({ commit }) {
+			await auth.signOut();
+			commit("setUser", null);
+			router.push("/");
 		},
-		loadPlayer({ commit, dispatch }, email) {
-			console.log("we're loading a user.");
-			console.log(email);
-			return firebase
-				.firestore()
-				.collection("users")
-				.where("email", "==", email)
-				.limit(1)
+		
+		async loadAll({ commit }, user) {
+			commit("setUser", user);
+
+			let playerDoc = await playersCollection
+				.where("user", "==", user.uid)
 				.get()
-				.then(function(querySnapshot) {
-					if (!querySnapshot.empty) {
-						console.log("There's a player with that email already.");
-						let doc = querySnapshot.docs[0];
-						let player = doc.data();
-						player.id = doc.id;
-						commit("setPlayer", player);
-						return dispatch("loadCharacterImage");
-					} else {
-						console.log("We've got to create a new player!");
-						return dispatch("createNewPlayer");
-					}
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) return querySnapshot.docs[0];
+					return null;
 				});
-		},
-		loadCharacterImage({ commit, dispatch, getters }) {
-			console.log("We're loading a character image.");
-			let imageRef = getters.getCharacter.imageRef;
-			console.log(imageRef);
-			return firebase
-				.storage()
-				.ref(imageRef)
-				.getDownloadURL()
-				.then(function(url) {
-					commit("setCharacterImage", url);
-					return dispatch("loadDungeon");
-				})
-				.catch(function(error) {
-					console.log(error.code);
-					return { successful: false, error: error.code };
-				});
-		},
-		loadDungeon({ commit, dispatch, getters }) {
-			console.log("We're loading a dungeon.");
-			let id = getters.getUserID;
-			console.log(id);
-			return firebase
-				.firestore()
-				.collection("dungeons")
-				.where("player", "==", id)
-				.limit(1)
+			if (playerDoc) {
+				commit("setPlayer", playerDoc.data());
+				commit("setPlayerDocRef", playerDoc.id);
+			}
+
+			let characters = [];
+			await charactersCollection
+				.where("user", "==", user.uid)
 				.get()
-				.then(function(querySnapshot) {
-					if (!querySnapshot.empty) {
-						console.log("This user has a dungeon.");
-						let doc = querySnapshot.docs[0];
-						let dungeon = doc.data();
-						dungeon.id = doc.id;
-						commit("setDungeon", dungeon);
-						return { successful: true };
-					} else {
-						console.log("We've got to create a new dungeon!");
-						return dispatch("createNewDungeon");
-					}
+				.then(querySnapshot => {
+					querySnapshot.forEach(doc => {
+						characters.push(doc.data());
+					})
 				});
+			commit("setCharacters", characters);
+			
+			let dungeon = await dungeonsCollection
+				.where("user", "==", user.uid)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) return querySnapshot.docs[0].data();
+					return null;
+				});
+			commit("setDungeon", dungeon);
 		},
-		createNewPlayer({ commit }) {
-			console.log("Creating a new player.");
-			return firebase
-				.firestore()
-				.collection("users")
-				.add(newPlayer)
-				.then(function(docRef) {
-					console.log("We've written a new document with id " + docRef.id);
-					let player = newPlayer;
-					player.id = docRef.id;
-					commit("setPlayer", player);
-					return { successful: true };
+
+		// getPlayerByDocRef({ getters }, docRef) {
+		// 	if (docRef == null) docRef = getters.getPlayerDocRef;
+		// 	console.log("Getting player by doc ref " + docRef);
+		// 	return firebase.firestore().collection("players").doc(docRef);
+		// },
+		// getPlayerByUser({ }, userID) {
+		// 	console.log("Getting player by user id " + userID);
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("players")
+		// 		.where("user", "==", userID)
+		// 		.limit(1)
+		// 		.get();
+		// },
+		// getCharacters({ getters }, player) {
+		// 	if (player == null) player = getters.getPlayer;
+		// 	console.log("Getting characters for player with user " + player.user);
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("characters")
+		// 		.where("user", "==", player.user)
+		// 		.get();
+		// },
+		// getCharacter({ }, characterID) {
+		// 	console.log("Getting character from ID: " + characterID);
+		// 	return firebase.firestore().collection("characters").doc(characterID);
+		// },
+		// getDungeon({ getters }, userID) {
+		// 	if (userID == null) userID = getters.getUserID;
+		// 	console.log("Getting dungeon from user ID: " + userID);
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("dungeons")
+		// 		.where("user", "==", userID)
+		// 		.limit(1)
+		// 		.get();
+		// },
+
+		// // PLAYER OPERATIONS
+		// refreshPlayer({ commit, dispatch, getters }) {
+		// 	console.log("we're refreshing our player with id " + getters.getUserID);
+		// 	dispatch("getPlayerByID", getters.getUserID).then(docRef => {
+		// 		console.log("Player refreshed.");
+		// 		commit("setPlayer", docRef.data());
+		// 	}).catch(error => {
+		// 		console.log("We've failed!");
+		// 		console.log(error);
+		// 		return { successful: false }
+		// 	})
+		// },
+		// createNewUser({ }, payload) {
+		// 	console.log("Creating a new user.");
+		// 	return firebase
+		// 		.auth()
+		// 		.createUserWithEmailAndPassword(payload.email, payload.password)
+		// 		.then(response => {
+		// 			console.log("We've signed up a user.");
+		// 			return { successful: true, user: response.user };
+		// 		})
+		// 		.catch(error => {
+		// 			console.log("Couldn't sign up that user!");
+		// 			return { successful: false, error: error };
+		// 		});
+		// },
+		async createNewPlayer({ }, id) {
+			console.log("Creating a new player for user id " + id);
+			let player = newPlayer;
+			player.user = id;
+
+			return playersCollection
+				.add(player)
+				.then(docRef => {
+					console.log("We've made a new player with id " + docRef.id);
+					return { successful: true, player: player, id: docRef.id };
 				})
-				.catch(function(error) {
+				.catch(error => {
 					console.error("Error adding document: " + error);
 					return { successful: false, error: error };
 				});
 		},
-		createNewDungeon({ commit, getters }) {
-			console.log("Creating a new dungeon.");
-			let dungeon = newDungeon;
-			console.log(dungeon);
-			dungeon.player = getters.getUserID;
-			console.log(dungeon);
-			return firebase
-				.firestore()
-				.collection("dungeons")
-				.add(dungeon)
-				.then(function(docRef) {
-					console.log("We've written a new document with id " + docRef.id);
-					dungeon.id = docRef.id;
-					commit("setDungeon", dungeon);
-					return { successful: true };
-				})
-				.catch(function(error) {
-					console.error("Error adding document: " + error);
-					return { successful: false, error: error };
-				});
-		},
-		updateDungeon({ commit, getters }, dungeon) {
-			return firebase
-				.firestore()
-				.collection("dungeons")
-				.set(getters.getDungeon.id)
-				.then(function() {
-					console.log("We've overwritten the dungeon.");
-					commit("setDungeon", dungeon);
-					return { successful: true };
-				})
-				.catch(function(error) {
-					console.error("Error overwriting document: " + error);
-					return { successful: false, error: error };
-				});
-		}
+		// loadCharacters({ commit, dispatch }) {
+		// 	dispatch("getCharacters").then(response => {
+		// 		if (response.successful) {
+		// 			commit("setCharacters", response.characters);
+		// 		} else {
+		// 			console.log("We failed!");
+		// 			console.log(response.error);
+		// 			return { successful: false }
+		// 		}
+		// 	}).catch(error => {
+		// 		console.log("We failed!");
+		// 		console.log(error);
+		// 		return { successful: false }
+		// 	})
+		// },
+		// createNewCharacter({ getters }, character=newCharacter) {
+		// 	console.log("We're adding a character.");
+		// 	character.user = getters.getUserID;
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("characters")
+		// 		.add(character)
+		// 		.then(function(docRef) {
+		// 			console.log("we've written a new document with id " + docRef.id);
+		// 			return { successful: true, id: docRef.id };
+		// 		})
+		// 		.catch(function(error) {
+		// 			console.log("Couldn't add that character.");
+		// 			return { successful: false, error: error };
+		// 		});
+		// },
+
+		// // DUNGEONS
+		// createNewDungeon({ getters }) {
+		// 	console.log("Creating a new dungeon.");
+		// 	let dungeon = newDungeon;
+		// 	dungeon.user = getters.getUserID;
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("dungeons")
+		// 		.add(dungeon)
+		// 		.then(docRef => {
+		// 			console.log("We've written a new document with id " + docRef.id);
+		// 			return { successful: true, dungeon: dungeon };
+		// 		})
+		// 		.catch(error => {
+		// 			console.error("Error adding document: " + error);
+		// 			return { successful: false, error: error };
+		// 		});
+		// },
+		// updateDungeon({ commit, getters }, dungeon) {
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("dungeons")
+		// 		.set(getters.getDungeon.id)
+		// 		.then(function() {
+		// 			console.log("We've overwritten the dungeon.");
+		// 			commit("setDungeon", dungeon);
+		// 			return { successful: true };
+		// 		})
+		// 		.catch(function(error) {
+		// 			console.error("Error overwriting document: " + error);
+		// 			return { successful: false, error: error };
+		// 		});
+		// },
+		/* eslint-enable no-empty-pattern */
+
+		// IMAGES
+		// uploadPlayerAvatar({ dispatch, getters }, avatar) {
+		// 	console.log("We're uploading a player avatar.");
+		// 	let fileLoc = `playerAvatars/${avatar.name}`;
+		// 	return firebase
+		// 		.storage()
+		// 		.ref()
+		// 		.child(fileLoc)
+		// 		.put(avatar)
+		// 		.then(function() {
+		// 			let oldImage = getters.getPlayerAvatar;
+		// 			dispatch("deleteSavedImage", oldImage);
+		// 			return dispatch("updatePlayerAvatar", fileLoc);
+		// 		})
+		// 		.catch(function(error) {
+		// 			return { successful: false, error: error };
+		// 		})
+		// },
+		// uploadCharacterAvatar({ commit }, avatar) {
+		// 	console.log("We're uploading a player avatar.");
+		// 	let fileLoc = `playerAvatars/${avatar.name}`;
+		// 	return firebase
+		// 		.storage()
+		// 		.ref()
+		// 		.child(fileLoc)
+		// 		.put(avatar)
+		// 		.then(function() {
+		// 			let characterImageLocation = getters.getCharacterAvatar;
+		// 			commit("setUserAvatar", avatar.name);
+		// 			return { successful: true };
+		// 		})
+		// 		.catch(function(error) {
+		// 			return { successful: false, error: error };
+		// 		})
+		// },
+		// updatePlayerAvatar({ dispatch, getters }, avatarLoc) {
+		// 	console.log("We're updating a player's reference to their avatar: " + avatarLoc);
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("players")
+		// 		.doc(getters.getUserID)
+		// 		.update( { "avatar": avatarLoc } )
+		// 		.then(function() {
+		// 			console.log("Reference successfully updated.");
+		// 			return dispatch("refreshPlayer");
+		// 		})
+		// 		.catch(function(error) {
+		// 			return { successful: false, error: error };
+		// 		})
+		// },
+		// updateCharacterAvatar({ dispatch, getters }, payload) {
+		// 	console.log(
+		// 		`We're updating the player's #${payload.index} reference to their avatar: ${payload.location}`
+		// 	);
+		// 	return firebase
+		// 		.firestore()
+		// 		.collection("players")
+		// 		.doc(getters.getUserID)
+		// 		.update( { "avatar": avatarLoc } )
+		// 		.then(function() {
+		// 			console.log("Reference succesfully updated.");
+		// 			return dispatch("refreshPlayer");
+		// 		})
+		// 		.catch(function(error) {
+		// 			return { successful: false, error: error };
+		// 		})
+		// },
+		// eslint-disable-next-line
+		// deleteSavedImage({ }, imageLocation) {
+		// 	console.log("We're deleting a stored image at " + imageLocation);
+		// 	if (!imageLocation) return { successful: true };
+		// 	return firebase
+		// 		.storage()
+		// 		.ref()
+		// 		.child(imageLocation)
+		// 		.delete()
+		// 		.then(function() {
+		// 			return { successful: true }
+		// 		})
+		// 		.catch(function(error) {
+		// 			return { successful: false, error: error }
+		// 		})
+		// },
   },
   modules: {
   }

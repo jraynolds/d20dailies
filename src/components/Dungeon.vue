@@ -1,10 +1,14 @@
 <template>
 	<v-container id="p5Container">
 		<VueP5 
+			v-if="$store.getters.getDungeon"
 			v-on="this" 
 			@mouseclicked="p5Click()" 
 			@mousemoved="p5MouseMoved()"
 			@windowresized="p5WindowResized()" />
+		<v-btn x-large primary @click="createDungeon()">
+			Enter the Dungeon
+		</v-btn>
 	</v-container>
 </template>
 
@@ -78,6 +82,15 @@ export default {
 		}
 	},
 	methods: {
+
+		createDungeon() {
+			this.$store.dispatch('createNewDungeon').then(response => {
+				if (response.successful) this.$store.commit("setDungeon", response.dungeon);
+				else console.log(response.error);
+			}).catch(error => {
+				console.log(error);
+			});
+		},
 
 		setup(sketch) {
 			console.log("Setup is running.");
@@ -362,7 +375,7 @@ export default {
 		}
 	},
 	mounted() {
-		this.resizeP5(this.p5.sketch);
+		if (this.$store.getters.getDungeon)	this.resizeP5(this.p5.sketch);
 	}
 }
 </script>

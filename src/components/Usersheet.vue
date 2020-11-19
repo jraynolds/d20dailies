@@ -20,7 +20,7 @@
 						label="Upload avatar"
 						@change="uploadAvatar"
 					></v-file-input>
-					<v-btn icon large color="primary" :disabled="!user.avatar" @click="saveAvatar()">
+					<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar()">
 						<v-icon large>mdi-content-save</v-icon>
 					</v-btn>
 				</v-row>
@@ -35,7 +35,7 @@
 
 				<v-row>
 					<router-link to="/dungeon" style="width: 100%;">
-						<Dungeon :mini="true" />
+						<Dungeon :mini="true" v-if="$store.getters.getDungeon" />
 					</router-link>
 					<v-btn color="primary" large style="width: 100%;" to="/dungeon">
 						Visit the Dungeon
@@ -96,7 +96,14 @@
 				<v-spacer style="height: 100px;"/>
 
 				<v-row>
-					<v-btn color="error" x-large style="width: 100%;">Log Out</v-btn>
+					<v-btn 
+						color="error" 
+						x-large 
+						style="width: 100%;" 
+						@click="$store.dispatch('signOut')"
+					>
+						Log Out
+					</v-btn>
 				</v-row>
 
 			</v-col>
@@ -147,7 +154,7 @@ export default {
 			this.avatar = avatar;
 		},
 		saveAvatar() {
-			this.$store.dispatch("uploadAvatar", this.avatar);
+			this.$store.dispatch("uploadPlayerAvatar", this.avatar);
 		}
 	}
 }
