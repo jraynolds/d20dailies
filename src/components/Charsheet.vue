@@ -1,47 +1,59 @@
 <template>
-	<v-container v-if="character">
-
-		<v-row id="avatar" class="align-center">
-			<v-col class="flex-grow-0 mr-n6">
-				<v-btn icon x-large @click="$emit('charswap', -1)">
+	<v-container>
+		
+		<v-row id="avatar" class="align-center justify-center">
+			<v-col cols="2" v-if="$store.getters.getCharacters.length > 1">
+				<v-btn icon x-large @click="charSwap(-1)">
 					<v-icon x-large>mdi-chevron-left</v-icon>
 				</v-btn>
 			</v-col>
-			<v-col class="flex-grow-1 text-center">
-				<v-icon v-if="!image" style="font-size: 220px;">mdi-account</v-icon>
+
+			<v-col cols="8" class="flex-grow-1 text-center">
+				<v-icon v-if="!character.avatar && !avatar" style="font-size: 220px;">
+					mdi-account
+				</v-icon>
 				<v-img 
 					v-else 
-					:src="image"
+					:src="character.avatar"
 					width="220"
 					height="220"
 					style="margin-left: auto; margin-right: auto;"
 				/>
-				<v-row class="justify-center align-center">
-					<v-file-input
-						:rules="avatarRules"
-						style="font-size: small"
-						accept="image/png, image/jpeg, image/bmp"
-						prepend-icon="mdi-camera"
-						label="Upload avatar"
-						@change="uploadAvatar"
-					></v-file-input>
-					<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar()">
-						<v-icon large>mdi-content-save</v-icon>
-					</v-btn>
-				</v-row>
 			</v-col>
-			<v-col class="flex-grow-0 ml-n6">
-				<v-btn icon x-large @click="$emit('charswap', 1)">
-					<v-icon x-large>mdi-chevron-right</v-icon>
+
+			<v-col cols="2" v-if="$store.getters.getCharacters.length > 1">
+				<v-btn icon x-large @click="charSwap(-1)">
+					<v-icon x-large>mdi-chevron-left</v-icon>
 				</v-btn>
 			</v-col>
+
+			<v-col cols="8">
+				<v-file-input
+					:rules="avatarRules"
+					style="font-size: small"
+					accept="image/png, image/jpeg, image/bmp"
+					label="Upload avatar"
+					:prepend-icon="uploadingAvatar ? '' : 'mdi-camera'"
+					@change="uploadAvatar"
+					:disabled="uploadingAvatar"
+				>
+					<template v-slot:prepend-inner v-if="uploadingAvatar">
+						<v-progress-circular indeterminate />
+					</template>
+				</v-file-input>
+			</v-col>
+			<v-btn icon large color="primary" :disabled="!avatar" @click="saveAvatar()">
+				<v-icon large>mdi-content-save</v-icon>
+			</v-btn>
+
 		</v-row>
 
 		<v-row id="name" class="mb-n4">
 			<v-col class="mb-n4">
 				<v-text-field
 					label="Name"
-					:value="character.name"
+					v-model="character.name"
+					disabled
 				/>
 			</v-col>
 		</v-row>
@@ -116,15 +128,15 @@
 			</v-col>
 
 		</v-row>
-
 	</v-container>
 </template>
 
 <script>
 export default {
-	props: [ "includeEquipment" ],
+	props: [ "character", "includeEquipment" ],
 	data: () => ({
 		avatar: null,
+		uploadingAvatar: false,
 		avatarRules: [
 			value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
 		],
@@ -210,9 +222,6 @@ export default {
 		},
 		player() {
 			return this.$store.getters.getPlayer;
-		},
-		character() {
-			return this.$store.getters.getCharacter;
 		},
 		image() {
 			return this.$store.getters.getCharacterImage;

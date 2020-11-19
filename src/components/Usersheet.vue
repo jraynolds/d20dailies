@@ -51,7 +51,6 @@
 								v-model="password.text"
 								:rules="password.rules"
 								:label="'New password'"
-								autocomplete="current-password"
 								required
 								:type="password.show ? 'text' : 'password'"
 								:append-icon="password.show ? 'mdi-eye' : 'mdi-eye-off'"
@@ -63,7 +62,6 @@
 								v-model="confirmPassword.text"
 								:rules="[ v => !!v || 'Password required.', matchingPasswords ]"
 								:label="'Confirm password'"
-								autocomplete="current-password"
 								required
 								:type="confirmPassword.show ? 'text' : 'password'"
 								:append-icon="confirmPassword.show ? 'mdi-eye' : 'mdi-eye-off'"

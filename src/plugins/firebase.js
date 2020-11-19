@@ -1,6 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth"
 import "firebase/firestore"
+import "firebase/storage"
 
 const config = {
 	apiKey: "AIzaSyAifnPzIFvT-uS5Jsq7y09FWQHUrPX4_Q4",
@@ -16,6 +17,7 @@ firebase.initializeApp(config);
 
 const db = firebase.firestore();
 const auth = firebase.auth();
+const storage = firebase.storage();
 
 const playersCollection = db.collection("players");
 const charactersCollection = db.collection("characters");
@@ -24,6 +26,7 @@ const dungeonsCollection = db.collection("dungeons");
 export {
 	db, 
 	auth,
+	storage,
 	playersCollection,
 	charactersCollection,
 	dungeonsCollection

@@ -3,13 +3,13 @@ import Vuex from 'vuex'
 import createPersistedState from "vuex-persistedstate"
 import Cookies from "js-cookie"
 import router from "@/router/index"
-import { 
-	auth, 
-	// playersCollection,
+import {
+	storage, 
+	auth,
+	playersCollection,
 	charactersCollection,
 	dungeonsCollection
 } from "@/plugins/firebase"
-import { playersCollection } from '../plugins/firebase'
 
 Vue.use(Vuex)
 
@@ -26,42 +26,43 @@ const newPlayer = {
 	},
 }
 
-// const newCharacter = {
-// 	name: "New Character",
-// 	user: "",
-// 	level: 0,
-// 	class: "",
-// 	alignment: "",
-// 	inspiration: false,
-// 	avatar: "",
-// 	abilities: {
-// 		charisma: 0,
-// 		intelligence: 0,
-// 		wisdom: 0
-// 	},
-// 	skills: {
-// 		accent: 0,
-// 		description: 0,
-// 		morality: 0,
-// 		persuasion: 0,
-// 		tactics: 0,
-// 		roleplaying: 0
-// 	},
-// 	stats: {
-// 		attack: {
-// 			value: 1,
-// 			max: 1
-// 		},
-// 		hp: {
-// 			value: 1,
-// 			max: 1
-// 		},
-// 		xp: {
-// 			value: 1,
-// 			max: 1
-// 		}
-// 	}
-// }
+const newCharacter = {
+	name: "New Character",
+	user: "",
+	bio: "",
+	level: 0,
+	class: "",
+	alignment: "",
+	inspiration: false,
+	avatar: "",
+	abilities: {
+		charisma: 0,
+		intelligence: 0,
+		wisdom: 0
+	},
+	skills: {
+		accent: 0,
+		description: 0,
+		morality: 0,
+		persuasion: 0,
+		tactics: 0,
+		roleplaying: 0
+	},
+	stats: {
+		attack: {
+			value: 1,
+			max: 1
+		},
+		hp: {
+			value: 1,
+			max: 1
+		},
+		xp: {
+			value: 1,
+			max: 1
+		}
+	}
+}
 
 // const newDungeon = {
 // 	user: "",
@@ -158,12 +159,11 @@ export default new Vuex.Store({
 	})],
 	state: initialState(),
 	getters: {
+		getCharacters(state) {
+			return state.characters;
+		},
 		getActiveCharacter(state) {
 			return state.characters[state.activeCharacter];
-		},
-		getActiveCharacterAvatar(state) {
-			if (state.characters.length == 0) return null;
-			return state.characters[state.activeCharacter].avatar;
 		},
 		getPlayerAvatar(state) {
 			if (!state.player) return null;
@@ -370,6 +370,7 @@ export default new Vuex.Store({
 			let characters = [];
 			await charactersCollection
 				.where("user", "==", user.uid)
+				// .orderBy("name")
 				.get()
 				.then(querySnapshot => {
 					querySnapshot.forEach(doc => {
@@ -386,6 +387,22 @@ export default new Vuex.Store({
 					return null;
 				});
 			commit("setDungeon", dungeon);
+		},
+
+		async loadCharacters({ commit, getters }, id) {
+			if (!id) id = getters.getUserID;
+
+			let characters = [];
+			await charactersCollection
+				.where("user", "==", id)
+				// .orderBy("name")
+				.get()
+				.then(querySnapshot => {
+					querySnapshot.forEach(doc => {
+						characters.push(doc.data());
+					})
+				});
+			commit("setCharacters", characters);
 		},
 
 		// getPlayerByDocRef({ getters }, docRef) {
@@ -483,22 +500,21 @@ export default new Vuex.Store({
 		// 		return { successful: false }
 		// 	})
 		// },
-		// createNewCharacter({ getters }, character=newCharacter) {
-		// 	console.log("We're adding a character.");
-		// 	character.user = getters.getUserID;
-		// 	return firebase
-		// 		.firestore()
-		// 		.collection("characters")
-		// 		.add(character)
-		// 		.then(function(docRef) {
-		// 			console.log("we've written a new document with id " + docRef.id);
-		// 			return { successful: true, id: docRef.id };
-		// 		})
-		// 		.catch(function(error) {
-		// 			console.log("Couldn't add that character.");
-		// 			return { successful: false, error: error };
-		// 		});
-		// },
+		async createNewCharacter({ dispatch, getters }, characterFields) {
+			console.log("We're adding a character.");
+			let character = newCharacter;
+			for (let field in characterFields) character[field] = characterFields[field];
+			character.user = getters.getUserID;
+			console.log(character);
+
+			try {
+				await charactersCollection.add(character);
+				await dispatch("loadCharacters");
+				return { successful: true };
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+		},
 
 		// // DUNGEONS
 		// createNewDungeon({ getters }) {
@@ -553,23 +569,29 @@ export default new Vuex.Store({
 		// 			return { successful: false, error: error };
 		// 		})
 		// },
-		// uploadCharacterAvatar({ commit }, avatar) {
-		// 	console.log("We're uploading a player avatar.");
-		// 	let fileLoc = `playerAvatars/${avatar.name}`;
-		// 	return firebase
-		// 		.storage()
-		// 		.ref()
-		// 		.child(fileLoc)
-		// 		.put(avatar)
-		// 		.then(function() {
-		// 			let characterImageLocation = getters.getCharacterAvatar;
-		// 			commit("setUserAvatar", avatar.name);
-		// 			return { successful: true };
-		// 		})
-		// 		.catch(function(error) {
-		// 			return { successful: false, error: error };
-		// 		})
-		// },
+		async uploadCharacterAvatar({ getters }, file) {
+			console.log("We're uploading a player avatar.");
+			let fileLoc = "characterAvatars/"
+			fileLoc += getters.getUserID;
+			fileLoc += new Date().getTime();
+			fileLoc += ".";
+			fileLoc += file.name.split(".").pop();
+
+			try {
+				await storage.ref().child(fileLoc).put(file);
+			} catch (error) {
+				console.log(error);
+				return { successful: false, error: error };
+			}
+
+			try {
+				let url = await storage.ref().child(fileLoc).getDownloadURL();
+				return { successful: true, location: url };
+			} catch (error) {
+				console.log(error);
+				return { successful: false, error: error };
+			}
+		},
 		// updatePlayerAvatar({ dispatch, getters }, avatarLoc) {
 		// 	console.log("We're updating a player's reference to their avatar: " + avatarLoc);
 		// 	return firebase

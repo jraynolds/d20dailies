@@ -8,7 +8,8 @@
 			</v-col>
 			<v-col cols="6">
 				<v-card>
-					<Charsheet :includeEquipment="true" />
+					<Charsheet :includeEquipment="true" v-if="character" :character="character" />
+					<AddCharacter v-else @charactersaved="createCharacter" />
 				</v-card>
 			</v-col>
 		</v-row>
@@ -19,7 +20,18 @@
 export default {
 	components: {
 		Usersheet: () => import("@/components/Usersheet.vue"),
-		Charsheet: () => import("@/components/Charsheet.vue")
+		Charsheet: () => import("@/components/Charsheet.vue"),
+		AddCharacter: () => import("@/components/AddCharacter.vue")
+	},
+	computed: {
+		character() {
+			return this.$store.getters.getActiveCharacter;
+		}
+	},
+	methods: {
+		createCharacter(character) {
+			this.$store.dispatch("createNewCharacter", character);
+		}
 	}
 }
 </script>
