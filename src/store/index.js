@@ -64,75 +64,75 @@ const newCharacter = {
 	}
 }
 
-// const newDungeon = {
-// 	user: "",
-// 	rooms: [
-// 		{ 
-// 			height: 5,
-// 			width: 5,
-// 			isLit: true,
-// 			isShown: true,
-// 			loc: [18, 31], 
-// 			doors: [ 
-// 				{ loc: [18, 33], isShown: true },
-// 				{ loc: [21, 31], isShown: true },
-// 				{ loc: [22, 34], isShown: true },
-// 				{ loc: [], isShown: false }
-// 			],
-// 			quadrant: "BOTTOM",
-// 			pathTo: [],
-// 			pathsFrom: []
-// 		},
-// 		{ 
-// 			height: 8,
-// 			width: 4,
-// 			isLit: false, 
-// 			isShown: true,
-// 			loc: [8, 20], 
-// 			doors: [ 
-// 				{ loc: [], isShown: false },
-// 				{ loc: [], isShown: false },
-// 				{ loc: [], isShown: false },
-// 				{ loc: [9, 27], isShown: true }
-// 			],
-// 			quadrant: "LEFT",
-// 			pathTo: [ {0:17,1:33}, {0:16,1:33}, {0:15,1:33}, {0:14,1:33}, {0:13,1:33}, {0:12,1:33}, {0:12,1:33}, {0:11,1:33}, {0:10,1:33}, {0:9,1:33}, {0:9,1:32}, {0:9,1:31}, {0:9,1:30}, {0:9,1:29}, {0:9,1:28} ],
-// 			pathsFrom: []
-// 		},
-// 		{ 
-// 			height: 4,
-// 			width: 7,
-// 			isLit: false, 
-// 			isShown: true,
-// 			loc: [8, 2], 
-// 			doors: [ 
-// 				{ loc: [], isShown: false },
-// 				{ loc: [], isShown: false },
-// 				{ loc: [14, 4], isShown: true },
-// 				{ loc: [], isShown: false }
-// 			],
-// 			quadrant: "TOP",
-// 			pathTo: [ {0:21,1:30}, {0:21,1:29}, {0:21,1:28}, {0:21,1:27}, {0:21,1:26}, {0:21,1:25}, {0:21,1:24}, {0:21,1:23}, {0:21,1:22}, {0:21,1:21}, {0:21,1:20}, {0:21,1:19}, {0:21,1:18}, {0:21,1:17}, {0:21,1:16}, {0:21,1:15}, {0:21,1:14}, {0:21,1:13}, {0:20,1:13}, {0:19,1:13}, {0:18,1:13}, {0:18,1:12}, {0:18,1:11}, {0:18,1:10}, {0:18,1:9}, {0:18,1:8}, {0:17,1:8}, {0:16,1:8}, {0:16,1:7}, {0:16,1:6}, {0:16,1:5}, {0:16,1:4}, {0:15,1:4} ],
-// 			pathsFrom: []
-// 		},
-// 		{ 
-// 			height: 4,
-// 			width: 4,
-// 			isLit: false, 
-// 			isShown: true,
-// 			loc: [33, 25], 
-// 			doors: [ 
-// 				{ loc: [33, 27], isShown: true },
-// 				{ loc: [], isShown: false },
-// 				{ loc: [], isShown: false },
-// 				{ loc: [], isShown: false }
-// 			],
-// 			quadrant: "RIGHT",
-// 			pathTo: [ {0:22,1:34}, {0:23,1:34}, {0:24,1:34}, {0:25,1:34}, {0:26,1:34}, {0:27,1:34}, {0:28,1:34}, {0:29,1:34}, {0:30,1:34}, {0:30,1:33}, {0:30,1:32}, {0:30,1:31}, {0:30,1:30}, {0:30,1:29}, {0:30,1:28}, {0:30,1:27}, {0:31,1:27}, {0:32,1:27} ],
-// 			pathsFrom: []
-// 		}
-// 	]
-// }
+const newDungeon = {
+	user: "",
+	rooms: [
+		{ 
+			height: 5,
+			width: 5,
+			isLit: true,
+			isShown: true,
+			loc: [18, 31], 
+			doors: [ 
+				{ loc: [18, 33], isShown: true },
+				{ loc: [21, 31], isShown: true },
+				{ loc: [22, 34], isShown: true },
+				{ loc: [], isShown: false }
+			],
+			quadrant: "BOTTOM",
+			pathTo: [],
+			pathsFrom: []
+		},
+		{ 
+			height: 8,
+			width: 4,
+			isLit: false, 
+			isShown: true,
+			loc: [8, 20], 
+			doors: [ 
+				{ loc: [], isShown: false },
+				{ loc: [], isShown: false },
+				{ loc: [], isShown: false },
+				{ loc: [9, 27], isShown: true }
+			],
+			quadrant: "LEFT",
+			pathTo: [ {0:17,1:33}, {0:16,1:33}, {0:15,1:33}, {0:14,1:33}, {0:13,1:33}, {0:12,1:33}, {0:12,1:33}, {0:11,1:33}, {0:10,1:33}, {0:9,1:33}, {0:9,1:32}, {0:9,1:31}, {0:9,1:30}, {0:9,1:29}, {0:9,1:28} ],
+			pathsFrom: []
+		},
+		{ 
+			height: 4,
+			width: 7,
+			isLit: false, 
+			isShown: true,
+			loc: [8, 2], 
+			doors: [ 
+				{ loc: [], isShown: false },
+				{ loc: [], isShown: false },
+				{ loc: [14, 4], isShown: true },
+				{ loc: [], isShown: false }
+			],
+			quadrant: "TOP",
+			pathTo: [ {0:21,1:30}, {0:21,1:29}, {0:21,1:28}, {0:21,1:27}, {0:21,1:26}, {0:21,1:25}, {0:21,1:24}, {0:21,1:23}, {0:21,1:22}, {0:21,1:21}, {0:21,1:20}, {0:21,1:19}, {0:21,1:18}, {0:21,1:17}, {0:21,1:16}, {0:21,1:15}, {0:21,1:14}, {0:21,1:13}, {0:20,1:13}, {0:19,1:13}, {0:18,1:13}, {0:18,1:12}, {0:18,1:11}, {0:18,1:10}, {0:18,1:9}, {0:18,1:8}, {0:17,1:8}, {0:16,1:8}, {0:16,1:7}, {0:16,1:6}, {0:16,1:5}, {0:16,1:4}, {0:15,1:4} ],
+			pathsFrom: []
+		},
+		{ 
+			height: 4,
+			width: 4,
+			isLit: false, 
+			isShown: true,
+			loc: [33, 25], 
+			doors: [ 
+				{ loc: [33, 27], isShown: true },
+				{ loc: [], isShown: false },
+				{ loc: [], isShown: false },
+				{ loc: [], isShown: false }
+			],
+			quadrant: "RIGHT",
+			pathTo: [ {0:22,1:34}, {0:23,1:34}, {0:24,1:34}, {0:25,1:34}, {0:26,1:34}, {0:27,1:34}, {0:28,1:34}, {0:29,1:34}, {0:30,1:34}, {0:30,1:33}, {0:30,1:32}, {0:30,1:31}, {0:30,1:30}, {0:30,1:29}, {0:30,1:28}, {0:30,1:27}, {0:31,1:27}, {0:32,1:27} ],
+			pathsFrom: []
+		}
+	]
+}
 
 const initialState = () => {
 	return {
@@ -196,6 +196,9 @@ export default new Vuex.Store({
 		}
 	},
   mutations: {
+		resetState(state) {
+			state = initialState;
+		},
 		setUser(state, user) {
 			state.user = user;
 		},
@@ -569,13 +572,38 @@ export default new Vuex.Store({
 		// 			return { successful: false, error: error };
 		// 		})
 		// },
-		async uploadCharacterAvatar({ getters }, file) {
-			console.log("We're uploading a player avatar.");
+		async uploadCharacterAvatar({ getters }, payload) {
+			console.log("We're uploading a character avatar.");
+			let fileLoc = "characterAvatars/"
+			fileLoc += getters.getUserID;
+			fileLoc += new Date().getTime();
+			fileLoc += ".";
+			fileLoc += payload.file.name.split(".").pop();
+
+			try {
+				await storage.ref().child(fileLoc).put(payload.file);
+			} catch (error) {
+				console.log(error);
+				return { successful: false, error: error };
+			}
+
+			try {
+				let url = await storage.ref().child(fileLoc).getDownloadURL();
+				await charactersCollection.where("user" "==", "")
+				return { successful: true, location: url };
+			} catch (error) {
+				console.log(error);
+				return { successful: false, error: error };
+			}
+		},
+		async changeCharacterAvatar({ getters }, payload) {
+			console.log("We're changing a character avatar.");
 			let fileLoc = "characterAvatars/"
 			fileLoc += getters.getUserID;
 			fileLoc += new Date().getTime();
 			fileLoc += ".";
 			fileLoc += file.name.split(".").pop();
+			if (!payload.user) payload.user = getters.getUser;
 
 			try {
 				await storage.ref().child(fileLoc).put(file);
@@ -584,11 +612,36 @@ export default new Vuex.Store({
 				return { successful: false, error: error };
 			}
 
+			let url;
 			try {
-				let url = await storage.ref().child(fileLoc).getDownloadURL();
-				return { successful: true, location: url };
+				url = await storage.ref().child(fileLoc).getDownloadURL();
 			} catch (error) {
 				console.log(error);
+				return { successful: false, error: error };
+			}
+
+			let originalURLSplit = payload.character.avatar.split("/");
+			let originalAvatarLoc = originalURLSplit.pop();
+			try {
+				await charactersCollection
+					.where("user", "==", payload.user.id)
+					.where("name", "==", payload.character.name)
+					.get()
+					.then(querySnapshot => {
+						if (!querySnapshot.empty) querySnapshot.docs[0].update({
+							avatar: url
+						});
+					}).catch(error => {
+						console.log(error);
+						return { successful: false, error: error };
+					})
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+
+			try {
+				await storage.child()
+			} catch (error) {
 				return { successful: false, error: error };
 			}
 		},
@@ -640,6 +693,291 @@ export default new Vuex.Store({
 		// 			return { successful: false, error: error }
 		// 		})
 		// },
+
+
+		async signUp({ dispatch, commit }, loginInfo) {
+			console.log("We're signing up a user.");
+			console.log(loginInfo);
+
+			let response = await dispatch("createNewUser", loginInfo);
+			if (!response.successful) return;
+			commit("setUser", response.user);
+
+			response = await dispatch("createNewPlayer", response.user.uid);
+			if (!response.successful) return;
+			commit("setPlayer", response.player);
+			commit("setPlayerDocRef", response.id);
+
+			return { successful: true };
+		},
+		async signIn({ dispatch, commit }, loginInfo) {
+			console.log("We're signing in a user.");
+			console.log(loginInfo);
+
+			let user;
+			try {
+				let response = await auth
+					.createUserWithEmailAndPassword(loginInfo.email, loginInfo.password);
+				user = response.user;
+				commit("setUser", user);
+			} catch (error) {
+				return { successful: false, error: error };
+			}
+
+			let loadResponse = await dispatch("loadAll", user.uid);
+			return loadResponse;
+		},
+		async signOut({}) {
+			auth()
+				.signOut()
+				.then(() => {
+					commit("resetState");
+					return { successful: true } 
+				})
+				.catch(error => {
+					console.log("Couldn't sign out!");
+					return { successful: false, error: error }
+				});
+		},
+
+		async createPlayer({}, userID) {
+			console.log("Creating a new player for user id " + id);
+			let player = newPlayer;
+			player.user = userID;
+
+			return await playersCollection
+				.add(player)
+				.then(docRef => {
+					console.log("We've made a new player with id " + docRef.id);
+					return { successful: true, player: player, id: docRef.id };
+				})
+				.catch(error => {
+					console.error("Error adding document: " + error);
+					return { successful: false, error: error };
+				});
+		},
+		async createCharacter({}, character) {
+			console.log("Creating a new character for user id " + id);
+			if (!character) character = newCharacter;
+			character.user = userID;
+
+			return await charactersCollection
+				.add(character)
+				.then(docRef => {
+					console.log("We've made a new character with id " + docRef.id);
+					return { successful: true, character: character, id: docRef.id };
+				})
+				.catch(error => {
+					console.error("Error adding document: " + error);
+					return { successful: false, error: error };
+				});
+		},
+		async createDungeon({}, dungeon) {
+			console.log("Creating a new dungeon for user id " + id);
+			if (!dungeon) dungeon = newDungeon;
+			dungeon.user = userID;
+
+			return await dungeonsCollection
+				.add(dungeon)
+				.then(docRef => {
+					console.log("We've made a new dungeon with id " + docRef.id);
+					return { successful: true, dungeon: dungeon, id: docRef.id };
+				})
+				.catch(error => {
+					console.error("Error adding document: " + error);
+					return { successful: false, error: error };
+				});
+		},
+
+		async loadAll({ dispatch, commit, getters }, userID) {
+			if (!userID) userID = getters.getUserID;
+
+			let playerResponse = await dispatch("getPlayer", userID);
+			if (!playerResponse.successful) return playerResponse;
+			commit("setPlayer", playerResponse.player);
+			commit("setPlayerDocRef", playerResponse.id);
+
+			let charactersResponse = await dispatch("getCharacters", userID);
+			if (!charactersResponse.successful) return charactersResponse;
+			if (charactersResponse.characters) {
+				commit("setCharacters", charactersResponse.characters);
+			}
+
+			let dungeonResponse = await dispatch("getDungeon", userID);
+			if (!dungeonResponse.successful) return dungeonResponse;
+			if (dungeonResponse.dungeon) {
+				commit("setDungeon", dungeonResponse.dungeon);
+			}
+
+			return { successful: true }
+		},
+		async getPlayer({ getters }, userID) {
+			if (!userID) userID = getters.getUserID;
+
+			return await playersCollection
+				.where("user", "==", userID)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						return { 
+							successful: true, 
+							player: querySnapshot.docs[0].data(), 
+							id: querySnapshot.docs[0].id 
+						}; 
+					}
+					return { successful: false, error: "No player found for this ID." };
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async getCharacters({}, userID) {
+			if (!userID) userID = getters.getUserID;
+
+			return await charactersCollection
+				.where("user", "==", userID)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						let characters = [];
+						for (let doc of querySnapshot.docs) {
+							characters.push(doc);
+						}
+						return { 
+							successful: true,
+							characters: characters
+						}; 
+					}
+					return { 
+						successful: true, 
+						characters: null, 
+						error: "No characters found for this ID." 
+					};
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async getCharacter({}, searchInfo) {
+			// searchInfo.name;
+			// searchInfo.player;
+
+			return await charactersCollection
+				.where("user", "==", searchInfo.userID)
+				.where("name", "==", searchInfo.name)
+				.limit(1)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						return { 
+							successful: true, 
+							character: querySnapshot.docs[0].data(), 
+							id: querySnapshot.docs[0].id 
+						}; 
+					}
+					return { 
+						successful: true, 
+						character: null, 
+						error: "No character found for these search terms." 
+					};
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async getDungeon({}, userID) {
+			if (!userID) userID = getters.getUserID;
+
+			return await dungeonsCollection
+				.where("user", "==", userID)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						return { 
+							successful: true, 
+							dungeon: querySnapshot.docs[0].data(), 
+							id: querySnapshot.docs[0].id 
+						}; 
+					}
+					return { successful: true, dungeon: null, error: "No dungeon found for this ID." };
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+
+		async updatePlayer({ getters }, payload) {
+			let userID = payload.userID || getters.getUserID;
+			let player = payload.player;
+
+			return await playersCollection
+				.where("user", "==", userID)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						querySnapshot.docs[0].update(player).then(() => {
+							return {
+								successful: true
+							}; 
+						}).catch((error) => {
+							return { successful: false, error: error };
+						})
+					}
+					return { successful: false, error: "No player found for this ID." };
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async updateCharacter({ getters }, payload) {
+			let userID = payload.userID || getters.getUserID;
+			let character = payload.character;
+			let name = payload.name;
+
+			return await playersCollection
+				.where("user", "==", userID)
+				.where("name", "==", name)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						querySnapshot.docs[0].update(character).then(() => {
+							return {
+								successful: true
+							}; 
+						}).catch((error) => {
+							return { successful: false, error: error };
+						})
+					}
+					return { successful: false, error: "No character found in this search." };
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async updateDungeon({}, payload) {
+			let userID = payload.userID || getters.getUserID;
+			let dungeon = payload.dungeon;
+
+			return await playersCollection
+				.where("user", "==", userID)
+				.get()
+				.then(querySnapshot => {
+					if (!querySnapshot.empty) {
+						querySnapshot.docs[0].update(dungeon).then(() => {
+							return {
+								successful: true
+							}; 
+						}).catch((error) => {
+							return { successful: false, error: error };
+						})
+					}
+					return { successful: false, error: "No dungeon found for this ID." };
+				}).catch(error => {
+					return { successful: false, error: error };
+				});
+		},
+		async uploadAvatar({}, payload) {
+			payload.image;
+			payload.folder;
+		},
+
+		async deleteCharacter({}, character) {
+		},
+
   },
   modules: {
   }

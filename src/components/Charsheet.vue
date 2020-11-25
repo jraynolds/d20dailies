@@ -137,6 +137,7 @@ export default {
 	data: () => ({
 		avatar: null,
 		uploadingAvatar: false,
+		swappingAvatar: false,
 		avatarRules: [
 			value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
 		],
@@ -262,11 +263,32 @@ export default {
 				"-webkit-text-fill-color": "transparent"
 			}
 		},
-		uploadAvatar(avatar) {
-			this.avatar = avatar;
+		uploadAvatar(file) {
+			if (!file) return;
+			if (file.size > 2000000) return;
+			this.uploadingAvatar = true;
+			this.$store.dispatch("uploadCharacterAvatar", file).then(response => {
+				// console.log(response);
+				this.avatar = response.location;
+				this.uploadingAvatar = false;
+			}).catch(error => {
+				console.log("we failed the upload.");
+				console.log(error);
+				this.uploadingAvatar = false;
+			});
 		},
 		saveAvatar() {
-			this.$store.dispatch("uploadAvatar", this.avatar);
+			this.swappingAvatar = true;
+			let payload = { character: this.character, file: this.avatar };
+			this.$store.dispatch("changeCharacterAvatar", payload).then(response => {
+				// console.log(response);
+				this.avatar = response.location;
+				this.swappingAvatar = false;
+			}).catch(error => {
+				console.log("we failed the upload.");
+				console.log(error);
+				this.swappingAvatar = false;
+			});
 		}
 	}
 }
